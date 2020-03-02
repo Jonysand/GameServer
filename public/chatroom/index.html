@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+    <script src="./index.js"></script>
+    <script src="./owData.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <title>XLT chat room</title>
+</head>
+<body>
+    <h1>Welcome to XLT chat room</h1>
+    <hr>
+    <div class="DialogBoxOnemes" id="DialogBoxTitle">
+        <p class="DialogBoxProfile">NAME</p>
+        <p class="DialogBoxMessage">MESSAGE</p>
+        <p class="DialogBoxTimestamp">TIME</p>
+    </div>
+    
+    <div id="DialogBox">
+    </div>
+    <hr>
+
+    <div id="InputArea">
+        <div id="ChooseCharactor">
+            <div style="padding:10px">Your current charactor: <select id="CharactorSelect"></select></div>
+        </div>
+        <textarea id="InputMessage" cols="30" rows="10"></textarea>
+        <button id="SendButton">Send</button>
+    </div>
+
+</body>
+</html>

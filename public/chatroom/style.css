@@ -1,0 +1,53 @@
+/*-- DialogBox --*/
+#DialogBox{
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    width: auto;
+    overflow-x: hidden; 
+    overflow-y: auto; 
+}
+
+#DialogBoxTitle{
+    font-weight: bolder;
+    font-size: larger;
+}
+
+.DialogBoxOnemes{
+    display: flex;
+    flex-direction: row;
+}
+
+.DialogBoxProfile, .DialogBoxMessage, .DialogBoxTimestamp{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.DialogBoxProfile{
+    width: 100px;
+}
+
+.DialogBoxMessage{
+    width: 200px;
+    flex-wrap: wrap;
+}
+
+.DialogBoxTimestamp{
+    width: 200px;
+    flex-wrap: nowrap;
+}
+
+
+
+/*-- InputArea --*/
+#InputArea{
+    position: fixed;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+#InputMessage{
+    width:300px
+}
