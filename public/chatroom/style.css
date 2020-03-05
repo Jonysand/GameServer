@@ -1,11 +1,9 @@
 /*-- DialogBox --*/
 #DialogBox{
-    display: flex;
-    flex-direction: column;
-    height: 200px;
+    max-height: 50vh;
     width: auto;
     overflow-x: hidden; 
-    overflow-y: auto; 
+    overflow-y: scroll;
 }
 
 #DialogBoxTitle{
@@ -16,6 +14,8 @@
 .DialogBoxOnemes{
     display: flex;
     flex-direction: row;
+    height: auto;
+    padding-bottom: 5px;
 }
 
 .DialogBoxProfile, .DialogBoxMessage, .DialogBoxTimestamp{
@@ -42,8 +42,6 @@
 
 /*-- InputArea --*/
 #InputArea{
-    position: fixed;
-    bottom: 0px;
     display: flex;
     flex-direction: column;
 }
