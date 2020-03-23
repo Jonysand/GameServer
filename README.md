@@ -40,7 +40,18 @@ For this particular project, there are no specific installation requirements, ho
 ## Process & Documentation
 
 ### Chat Room
+- Mar 2 2020
 The first application is a simple online chatroom built with express. People can type their words in the box and share them to public.
+
+- Mar 5 2020
+Chat history now storing using NeDB, making it easier to insert, sort and organizing data.
+
+- Mar 22 2020
+ChatRoom with brand new interface. Backend with support of MySQL.
+
+### Game data storage
+This project also serves as the backend server of another game made by Unity. Check it out here:
+https://github.com/Jonysand/CodeLab1-yl7113-HW5
 
 ## Challenges & Struggles
 - JSON file read/write

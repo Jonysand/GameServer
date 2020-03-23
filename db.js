@@ -1,30 +1,41 @@
 // individual items in this database is called "document"
 
 const Datastore = require("nedb");
-const fs = require("fs");
+const mysql = require("mysql");
+require('dotenv').config();
+
+let mysqlConnection = mysql.createConnection({
+    host     : process.env.host,
+    user     : process.env.MysqlUser,
+    password : process.env.MysqlPassword,
+    database : process.env.MysqlDatabase
+})
+
+mysqlConnection.connect();
 
 const db = new Datastore({filename:"chathistory.db", autoload:true});
 db.loadDatabase();
 
-chatData = JSON.parse(fs.readFileSync('./public/chatroom/ChatData.json'));
-for (let i = 0; i < chatData.length; i++) {
-    const oneMes = {
-        "name": chatData[i].name,
-        "message": chatData[i].message,
-        "timestamp": new Date(chatData[i].timestamp)
-    }
-    db.insert(oneMes, (err, docs)=>{
-        if(err) {console.log(err);}
-        console.log(docs);
-    })
-}
+db.find({}, (err, docs)=>{
+    docs.forEach(doc => {
+        let sqlQuery = "INSERT INTO ChatHistory(id, SenderName, SenderMessage, SenderTimestamp) VALUES (?, ?, ?, ?)"
+        let values = [doc._id, doc.name, doc.message, (new Date(doc.timestamp)).toISOString().slice(0, 19).replace('T', ' ')]
+        mysqlConnection.query(
+            sqlQuery,
+            values,
+            function (error, results, fields) {
+                if (error){
+                    console.log(error);
+                }
+            }
+        );
+    });
+})
 
-// db.remove({_id:"qMKHXLDJSxtyZSaO"}, (err, docs)=>{
-//     console.log(docs);
-// })
 
+// mysqlConnection.end();
 
-// ------------------Syntax--------------------
+// ------------------NeDB Syntax--------------------
 
 // db.insert(oneMes, (err, docs) => {
 //     if(err) {console.log(err);}

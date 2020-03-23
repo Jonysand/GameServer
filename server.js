@@ -1,8 +1,17 @@
 const fs = require('fs');
-const path = require(`path`);
 const express = require(`express`);
 const Datastore = require("nedb");
 const app = express();
+const mysql = require("mysql");
+require('dotenv').config();
+
+let mysqlConnectionPool = mysql.createConnection({
+    connectionLimit : 10,
+    host     : process.env.host,
+    user     : process.env.MysqlUser,
+    password : process.env.MysqlPassword,
+    database : process.env.MysqlDatabase
+})
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -24,32 +33,33 @@ app.get("/data", (request, response) => {
 //----------
 const ChatHistoryDB = new Datastore({filename:"chathistory.db", autoload:true});
 app.get("/ChatHistoryData", (request, response) => {
-    ChatHistoryDB.find({}).sort({timestamp:-1}).exec((err, docs)=>{
-        if(err){
-            response.json({"result":"fail_fetching"});
-            console.log("fail_fetching");
+    let sqlQuery = "SELECT * FROM ChatHistory ORDER BY SenderTimestamp DESC;"
+    mysqlConnectionPool.query(
+        sqlQuery,
+        function (error, results, fields) {
+            if (error){
+                console.log(error);
+            }else{
+                response.json(results);
+            }
         }
-        else{
-            response.json(docs);
-        }
-    })
+    );
 })
 app.post("/ChatMessageSent", (request, response) => {
-    let newMessage = {
-            "name": `${request.body.name}`,
-            "message": `${request.body.message}`,
-            "timestamp":`${Date().toString()}`
-        };
-        ChatHistoryDB.insert(newMessage,(err, docs)=>{
-        if(err){
-            response.json({"result":"fail_updating"});
-            console.log("fail_updating");
+    let sqlQuery = "INSERT INTO ChatHistory(id, SenderName, SenderMessage, SenderTimestamp) VALUES (UUID_TO_BIN(UUID()), ?, ?, ?)"
+    let values = [request.body.name, request.body.message, (new Date()).toISOString().slice(0, 19).replace('T', ' ')]
+    mysqlConnectionPool.query(
+        sqlQuery,
+        values,
+        function (error, results, fields) {
+            if (error){
+                console.log(error);
+                response.json({"result":"fail_updating"});
+            }else{
+                response.json({"result":"success_updating"});
+            }
         }
-        else{
-            response.json({"result":"success_updating"});
-            console.log("success_updating");
-        }
-    })
+    );
 })
 
 

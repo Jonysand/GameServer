@@ -8,6 +8,11 @@ function init(){
     HeroName = owData.HeroList[0];
     document.getElementById("SendButton").addEventListener("click", sendMessage);
     loadHistory();
+    // resize the main area
+    if (window.innerWidth*4 > window.innerHeight*3) { // Desktop
+        document.getElementById("MainArea").style.width = "600px";
+        document.getElementById("MainArea").style.margin = "0 auto";
+    }
 }
 
 function buildHeroSelectControl(list){
@@ -40,6 +45,7 @@ async function sendMessage(){
         })
     const resultJson = await response.json();
     console.log(resultJson.result);
+    alert("Message Sent!");
     setTimeout(function() {
         location.reload();
       }, 1000);
@@ -60,19 +66,56 @@ async function loadHistory(){
     ChatHistory.forEach(eachMessage => {
         let eachMessageHTML = document.createElement("div");
         eachMessageHTML.setAttribute('class', 'DialogBoxOnemes');
+        
         let eachMessageProfile = document.createElement("p");
         eachMessageProfile.setAttribute('class', 'DialogBoxProfile');
-        eachMessageProfile.appendChild(document.createTextNode(`${eachMessage.name}`));
+        eachMessageProfile.appendChild(document.createTextNode(`· ${eachMessage.SenderName}`));
+
         let eachMessageMes = document.createElement("p");
         eachMessageMes.setAttribute('class', 'DialogBoxMessage');
-        eachMessageMes.appendChild(document.createTextNode(`${eachMessage.message}`));
+        eachMessageMes.appendChild(document.createTextNode(`${eachMessage.SenderMessage}`));
+
+        let eachMessageMain = document.createElement("div");
+        eachMessageMain.setAttribute('class', 'DialogBoxEachMain');
+        eachMessageMain.appendChild(eachMessageProfile);
+        eachMessageMain.appendChild(eachMessageMes);
+
         let eachMessageTime = document.createElement("p");
         eachMessageTime.setAttribute('class', 'DialogBoxTimestamp');
-        eachMessageTime.appendChild(document.createTextNode(`${new Date(eachMessage.timestamp)}`));
+        eachMessageTime.appendChild(document.createTextNode(`${timeFormat(new Date(eachMessage.SenderTimestamp))}`));
 
-        eachMessageHTML.appendChild(eachMessageProfile);
-        eachMessageHTML.appendChild(eachMessageMes);
+        eachMessageHTML.appendChild(eachMessageMain);
         eachMessageHTML.appendChild(eachMessageTime);
         dialogBox.appendChild(eachMessageHTML);
     });
+}
+
+const monthEng = [  "Jan", 
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec"
+];
+
+function timeFormat(time){
+    let result = "";
+    if((new Date()).getFullYear-time.getFullYear() > 0){
+        result += time.getFullYear();
+        result += ' ';
+    }
+    result += monthEng[time.getMonth()];
+    result += '.';
+    result += ("0" + time.getDate()).slice(-2);
+    result += ' ';
+    result += ("0" + time.getHours()).slice(-2);
+    result += ':';
+    result += ("0" + time.getMinutes()).slice(-2);
+    return result;
 }
